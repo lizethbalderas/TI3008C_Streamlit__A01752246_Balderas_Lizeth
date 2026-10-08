@@ -24,7 +24,7 @@ st.title("Explorador de operación")
 st.caption("Aplicación inicial para explorar resultados por área y región.")
 
 # TODO OBLIGATORIO: escribe tu nombre completo.
-st.write("**Desarrollado por:** Escribe aquí tu nombre")
+st.write("**Desarrollado por: Lizeth Jaqueline Balderas Sánchez :)")
 
 st.sidebar.header("Filtros")
 
@@ -67,23 +67,51 @@ st.info(
 # Puedes reorganizar el código existente cuando sea necesario.
 # ================================================================
 
-# TODO OPCIÓN A: Tablero ejecutivo
-# - Agrega al menos dos indicadores con st.metric.
-# - Incorpora otro filtro.
-# - Organiza dos vistas mediante st.tabs.
 
-# TODO OPCIÓN B: Explorador de datos
-# - Permite cargar un CSV con st.file_uploader.
-# - Valida que el archivo tenga las columnas necesarias.
-# - Permite descargar df_filtrado con st.download_button.
 
 # TODO OPCIÓN C: Simulador
 # - Solicita al menos dos valores al usuario.
 # - Realiza un cálculo con esos valores.
 # - Muestra un resultado y un mensaje success, warning o error.
 
-# TODO OPCIÓN D: Reporte interactivo
-# - Agrega una introducción que explique el propósito.
-# - Organiza resultados y metodología en pestañas o en la barra lateral.
-# - Incluye una conclusión o recomendación basada en los datos visibles.
+st.divider()
+st.subheader("Simulador de Estimación de Horas de Trabajo")
 
+# 1. estas serán las entrdas del usuario:
+col_input1, col_input2 = st.columns(2)
+
+with col_input1:
+    casos_esperados = st.number_input(
+        "Número de casos esperados",
+        min_value=1,
+        max_value=500,
+        value=100,
+        step=5
+    )
+
+with col_input2:
+    minutos_por_caso = st.slider(
+        "Tiempo promedio por caso (minutos)",
+        min_value=5,
+        max_value=120,
+        value=30
+    )
+
+# 2 calculo que se hace basado en las entradas
+horas_totales = (casos_esperados * minutos_por_caso) / 60.0
+
+# 3 mostrar resultado mediante st.metric (visualización)
+st.metric(
+    label="Horas Totales Estimadas",
+    value=f"{horas_totales:.1f} hrs"
+)
+
+# 4. Retroalimentación dinamica (st.success / st.warning)
+limite_capacidad = 40.0  # Límite de horas semanales
+
+if horas_totales > limite_capacidad:
+    st.warning(
+        f"La estimación ({horas_totales:.1f} hrs) supera la capacidad semanal disponible ({limite_capacidad} hrs)."
+    )
+else:
+    st.success("La capacidad estimada es suficiente para cubrir la carga de trabajo.")
